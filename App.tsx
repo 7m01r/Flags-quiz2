@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { GameMode, Country, Question, GameState } from './types';
-import { countries, getFlagUrl } from './data/countries';
-import { getCountryFact } from './services/geminiService';
+import { GameMode, Country, Question, GameState } from './types.ts';
+import { countries, getFlagUrl } from './data/countries.ts';
+import { getCountryFact } from './services/geminiService.ts';
 import { Globe, Trophy, Play, Settings, RefreshCcw, Info, ChevronLeft } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -45,7 +45,6 @@ const App: React.FC = () => {
         const distractors = otherCountries.sort(() => 0.5 - Math.random()).slice(0, 3).map(c => c.capital);
         options = [country.capital, ...distractors].sort(() => 0.5 - Math.random());
       } else if (mode === GameMode.AREA) {
-        // Find 3 other random countries to compare
         const pool = [country, ...otherCountries.sort(() => 0.5 - Math.random()).slice(0, 3)];
         const largest = [...pool].sort((a, b) => b.area - a.area)[0];
         questionText = `أي من هذه الدول تمتلك أكبر مساحة سطحية؟`;
@@ -115,7 +114,6 @@ const App: React.FC = () => {
     setGameState(prev => ({ ...prev, isFinished: false, currentQuestionIndex: 0, score: 0 }));
   };
 
-  // --- شاشة البداية ---
   if (!isPlaying) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8">
@@ -125,7 +123,7 @@ const App: React.FC = () => {
               <Globe className="w-10 h-10 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-black text-center text-gray-800 mb-2">عالم الدول</h1>
+          <h1 className="text-3xl md:text-4xl font-black text-center text-gray-800 mb-2 tracking-tight">عالم الدول</h1>
           <p className="text-center text-gray-500 mb-8 font-medium">مغامرة جغرافية ذكية بين يديك</p>
           
           <div className="space-y-6">
@@ -185,7 +183,6 @@ const App: React.FC = () => {
     );
   }
 
-  // --- شاشة النهاية ---
   if (gameState.isFinished) {
     const percentage = (gameState.score / gameState.totalQuestions) * 100;
     let rank = "مبتدئ";
@@ -220,12 +217,10 @@ const App: React.FC = () => {
     );
   }
 
-  // --- شاشة الأسئلة ---
   const currentQuestion = questions[gameState.currentQuestionIndex];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 md:py-10 min-h-screen flex flex-col">
-      {/* Header Info */}
       <div className="flex justify-between items-center mb-6 bg-white/70 backdrop-blur-lg p-4 md:p-5 rounded-[1.5rem] shadow-sm border border-white/50">
         <div className="flex items-center gap-3">
           <button onClick={resetGame} className="p-2 hover:bg-gray-100 rounded-xl text-gray-400 transition-colors">
@@ -245,7 +240,6 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Progress Bar */}
       <div className="w-full h-2.5 bg-gray-200/50 rounded-full mb-8 overflow-hidden backdrop-blur-sm">
         <div 
           className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-700 ease-out"
@@ -253,7 +247,6 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* Question Card */}
       <div className="bg-white/80 backdrop-blur-sm rounded-[2.5rem] shadow-xl p-6 md:p-10 mb-6 flex-1 flex flex-col items-center justify-center border border-white">
         <h2 className="text-xl md:text-3xl font-black text-gray-800 mb-8 text-center px-2 leading-tight">
           {currentQuestion.questionText}
@@ -294,7 +287,6 @@ const App: React.FC = () => {
           })}
         </div>
 
-        {/* Gemini Fact */}
         {isAnswered && (
           <div className="mt-10 w-full animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out">
              {selectedAnswer === currentQuestion.targetValue ? (
@@ -330,7 +322,6 @@ const App: React.FC = () => {
         )}
       </div>
 
-      {/* Footer Navigation */}
       <div className="flex justify-center md:justify-end mt-4 pb-10">
         {isAnswered && (
           <button
