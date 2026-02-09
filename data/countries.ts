@@ -1,5 +1,5 @@
 
-import { Country } from '../types';
+import { Country } from '../types.ts';
 
 export const countries: Country[] = [
   { name: 'السعودية', capital: 'الرياض', area: 2149690, flag: 'SA', code: 'SA' },
